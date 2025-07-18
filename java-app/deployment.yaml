@@ -4,7 +4,7 @@ metadata:
   name: java-deploy
   namespace: java-space
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: java
