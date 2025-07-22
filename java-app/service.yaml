@@ -4,7 +4,7 @@ metadata:
   name: java-svc 
   namespace: java-space 
 spec: 
-  type: NodePort
+  type: LoadBalancer
   selector: 
     app: java 
   ports: 
