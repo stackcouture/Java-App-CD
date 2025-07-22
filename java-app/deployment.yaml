@@ -4,7 +4,7 @@ metadata:
   name: java-deploy
   namespace: java-space
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: java
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: java-app
-        image: 104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring:latest
+        image: 104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring:01f6255e5092c1c25802ba682a2217e8c8cb9e07
         ports:
         - containerPort: 8080
       imagePullSecrets:
