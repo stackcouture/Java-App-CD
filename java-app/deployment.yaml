@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: java-app
-        image: 104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring:01f6255e5092c1c25802ba682a2217e8c8cb9e07
+        image: 104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring:0ec69b178032d94c2b309f739d6ea27a790e3144
         ports:
         - containerPort: 8080
       imagePullSecrets:
