@@ -12,7 +12,7 @@ spec:
     path: java-app
   destination: 
     server: https://kubernetes.default.svc
-    namespace: java-app
+    namespace: java-space
 
   syncPolicy:
     syncOptions:
