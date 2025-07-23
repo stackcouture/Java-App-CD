@@ -19,6 +19,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      imagePullSecrets:
+          - name: {{ .Values.ecr_credes_name }} 
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -27,6 +29,5 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          imagePullSecrets:
-          - name: {{ .Values.ecr_credes_name }} 
+          
 
