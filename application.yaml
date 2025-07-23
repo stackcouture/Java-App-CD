@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
-    targetRevision: feature/argo-with-main
+    targetRevision: dev
     path: java-app-chart
     helm:
       valueFiles:
