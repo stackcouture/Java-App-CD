@@ -1,0 +1,16 @@
+replicaCount: 3
+
+image:
+  repository: javaspring
+  pullPolicy: IfNotPresent
+  tag: "0ec69b178032d94c2b309f739d6ea27a790e3144"
+
+namespace: java-ns
+
+imagePullSecrets: []
+
+service:
+  type: LoadBalancer
+  port: 8080
+  name: java-svc
+  label: node-app

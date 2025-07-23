@@ -1,21 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: node-app-argo-application
+  name: java-argo-application
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
     targetRevision: feature/argo-with-helm
-    path: node-app-chart
+    path: java-app-chart
     helm:
       valueFiles:
-        - $values/values.yaml
+        - values.yaml
 
   destination: 
     server: https://kubernetes.default.svc
-    namespace: node-ns
+    namespace: java-ns
 
   syncPolicy:
     syncOptions:
