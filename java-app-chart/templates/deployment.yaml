@@ -20,7 +20,7 @@ spec:
       {{- end }}
     spec:
       imagePullSecrets:
-          - name: {{ .Values.ecr_credes_name }} 
+        - name: {{ .Values.ecr_credes_name }} 
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
