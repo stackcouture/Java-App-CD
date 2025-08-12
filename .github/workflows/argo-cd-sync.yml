@@ -26,12 +26,5 @@ jobs:
             --auth-token $ARGOCD_API_TOKEN \
             --insecure
 
-      - name: Sync app
-        env:
-          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
-          ARGOCD_API_TOKEN: ${{ secrets.ARGOCD_API_TOKEN }}
-        run: |
-          argocd app sync <your-app-name> \
-            --server $ARGOCD_SERVER \
-            --auth-token $ARGOCD_API_TOKEN \
-            --insecure
+      - name: Account list
+        run: argocd account list
