@@ -1,126 +1,67 @@
-name: Promote Dev to Stage
+name: Promote Image Tag to Stage
 
 on:
   workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Container image tag to promote"
+        required: true
+        type: string
+      confirm:
+        description: "Type 'yes' to confirm promotion"
+        required: true
+        type: string
 
 jobs:
   promote:
-    name: Promote dev-values to stage-values.yaml
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
+
+    env:
+      FILE_PATH: deploy/stage-values.yaml
+      IMAGE_PATH: .image.tag
 
     steps:
-      # Checkout the main repo with full history for git commands
-      - name: Checkout main repo (values)
+      - name: Confirm promotion intent
+        run: |
+          if [[ "${{ inputs.confirm }}" != "yes" ]]; then
+            echo "Promotion not confirmed. You must type 'yes' to proceed."
+            exit 1
+          fi
+
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: main
 
-      # Clone the Helm chart repo early so it's ready for validation
-      - name: Clone Helm chart repo
-        run: git clone https://github.com/stackcouture/springboot-helm-chart.git
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
 
-      # Configure Git author info for commits
-      - name: Configure Git
+      - name: Read current tag
+        id: current
+        run: |
+          CURRENT_TAG=$(yq e "${IMAGE_PATH}" "${FILE_PATH}")
+          echo "CURRENT_TAG=${CURRENT_TAG}" >> $GITHUB_ENV
+          echo "Current tag: $CURRENT_TAG"
+
+      - name: Check if tag already promoted
+        if: env.CURRENT_TAG == inputs.image_tag
+        run: |
+          echo "The tag '${{ inputs.image_tag }}' is already in stage-values.yaml. No promotion needed."
+          exit 0
+
+      - name: Update stage-values.yaml with new tag
+        run: |
+          yq e "${IMAGE_PATH} = \"${{ inputs.image_tag }}\"" -i "${FILE_PATH}"
+
+      - name: Commit and push changes to main
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
-      # Create a promotion branch named with short git SHA
-      - name: Create promotion branch from Git SHA
-        id: create-branch
-        run: |
-          SHA=$(git rev-parse --short HEAD)
-          BRANCH_NAME="promote-dev-to-stage-$SHA"
-          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          git checkout -b "$BRANCH_NAME"
-
-      # Show diff between current stage-values.yaml and dev-values.yaml for PR body
-      - name: Show diff before copying
-        run: |
-          echo '```diff' > diff.txt
-          diff deploy/stage-values.yaml deploy/dev-values.yaml || true >> diff.txt
-          echo '```' >> diff.txt
-
-      # Copy dev-values.yaml to stage-values.yaml (promote)
-      - name: Promote dev to stage
-        run: |
-          cp deploy/dev-values.yaml deploy/stage-values.yaml
-
-      # Check if there are any changes to commit; exit if none to avoid empty commit
-      - name: Check for changes after promote
-        run: |
-          if git diff --quiet deploy/stage-values.yaml; then
-            echo "No changes to promote. Exiting workflow."
-            exit 0
-          fi
-
-      # Validate the stage-values.yaml with Helm template to catch invalid config early
-      - name: Validate Helm template (fail if invalid)
-        run: |
-          helm template my-app springboot-helm-chart/helm-charts/springboot \
-            -f deploy/stage-values.yaml
-
-      # Commit and push the promotion branch
-      - name: Commit and push changes
-        run: |
-          git add deploy/stage-values.yaml
-          git commit -m "Promote dev-values to stage-values"
-          git push origin "$BRANCH_NAME"
-
-      # Check if a PR already exists for this promotion branch
-      - name: Check for existing PR
-        id: pr-check
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const branch = process.env.BRANCH_NAME;
-            const { data: pulls } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              head: `${context.repo.owner}:${branch}`
-            });
-            if (pulls.length > 0) {
-              return pulls[0].number.toString();
-            }
-            return '0';
-
-      # Read the diff file content for the PR body
-      - name: Read diff into output
-        id: read-diff
-        run: |
-          body="$(cat diff.txt)"
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$body" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      # Optional debug step (remove if not needed)
-      - name: Debug info
-        run: |
-          echo "Promotion branch: $BRANCH_NAME"
-          git log -1
-          # Uncomment if GitHub CLI is installed
-          # gh pr list --head $BRANCH_NAME || echo "No PR found"
-
-      # Create a PR only if none exists for this branch
-      - name: Create Pull Request
-        if: steps.pr-check.outputs.result == '0'
-        id: cpr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "Promote dev-values to stage-values"
-          body: |
-            This PR promotes changes from `dev-values.yaml` → `stage-values.yaml`.
-
-            ### 🔍 Visual Diff:
-            ${{ steps.read-diff.outputs.body }}
-          base: main
-          branch: ${{ env.BRANCH_NAME }}
-          labels: |
-            auto-merge
-            promotion
+          git add "${FILE_PATH}"
+          git commit -m "Promote image tag to ${{ inputs.image_tag }}"
+          git push origin main
