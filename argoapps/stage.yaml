@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: java-argo-application
+  name: java-stage-app
   namespace: argocd
 spec:
   project: default
@@ -11,11 +11,11 @@ spec:
     path: java-app-chart
     helm:
       valueFiles:
-        - values.yaml
+        - deploy/stage-values.yaml
 
   destination: 
     server: https://kubernetes.default.svc
-    namespace: java-ns
+    namespace: stage
 
   syncPolicy:
     syncOptions:
