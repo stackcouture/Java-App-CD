@@ -10,8 +10,8 @@ namespace: java-ns
 imagePullSecrets: []
 
 service:
-  type: LoadBalancer
-  port: 8080
+  type: NodePort
+  port: 8081
   name: java-svc
   label: java-app
 

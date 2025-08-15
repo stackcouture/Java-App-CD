@@ -10,26 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
-
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
-
-      - name: Apply Argo CD Application manifest
-        run: |
-          echo "Applying Application manifest..."
-          kubectl apply -f Application.yaml -n argocd
-      
-      - name: Confirm Application exists
-        run: |
-          kubectl get application java-argo-application -n argocd
-
-
       - name: Set up Argo CD CLI
         run: |
           curl -sSL https://github.com/argoproj/argo-cd/releases/download/v2.5.3/argocd-linux-amd64 -o /usr/local/bin/argocd
