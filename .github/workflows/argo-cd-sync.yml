@@ -25,3 +25,6 @@ jobs:
             --server $ARGOCD_SERVER \
             --auth-token $ARGOCD_API_TOKEN \
             --insecure
+            
+      - name: Test connection to Argo CD server
+        run: curl -k https://$ARGOCD_SERVER/healthz
