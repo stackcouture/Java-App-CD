@@ -2,19 +2,6 @@ name: Promote Dev to Stage
 
 on:
   workflow_dispatch:
-    inputs:
-      image-tag:
-        description: 'Image tag to promote (optional, overrides dev-values.yaml tag)'
-        required: false
-        default: ''
-      promotion-message:
-        description: 'Promotion commit and PR message (optional)'
-        required: false
-        default: 'Promote dev-values to stage-values'
-      confirm-promotion:
-        description: 'Type "yes" to confirm promotion (required)'
-        required: true
-        default: 'no'
 
 jobs:
   promote:
@@ -25,74 +12,65 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Check confirmation input
-        if: ${{ github.event.inputs.confirm-promotion != 'yes' }}
-        run: |
-          echo "Promotion not confirmed. Please type 'yes' to confirm."
-          exit 1
-
+      # Checkout the main repo with full history for git commands
       - name: Checkout main repo (values)
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
+      # Clone the Helm chart repo early so it's ready for validation
       - name: Clone Helm chart repo
         run: git clone https://github.com/stackcouture/springboot-helm-chart.git
 
-      - name: Install yq for YAML parsing
-        run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-
+      # Configure Git author info for commits
       - name: Configure Git
         run: |
-          git config user.name "Naveen"
-          git config user.email "naveenramlu28@gmail.com"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-      - name: Determine image tag for branch name
-        id: determine-tag
+      # Create a promotion branch named with short git SHA
+      - name: Create promotion branch from Git SHA
+        id: create-branch
         run: |
-          if [[ -n "${{ github.event.inputs.image-tag }}" ]]; then
-            TAG="${{ github.event.inputs.image-tag }}"
-          else
-            TAG=$(yq e '.image.tag' deploy/dev-values.yaml)
-            if [[ -z "$TAG" || "$TAG" == "null" ]]; then
-              TAG=$(git rev-parse --short HEAD)
-            fi
-          fi
-          echo "TAG=$TAG" >> $GITHUB_ENV
-          BRANCH_NAME="promote-dev-to-stage-$TAG"
+          SHA=$(git rev-parse --short HEAD)
+          BRANCH_NAME="promote-dev-to-stage-$SHA"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          echo "Using image tag: $TAG"
           git checkout -b "$BRANCH_NAME"
 
+      # Show diff between current stage-values.yaml and dev-values.yaml for PR body
       - name: Show diff before copying
         run: |
           echo '```diff' > diff.txt
           diff deploy/stage-values.yaml deploy/dev-values.yaml || true >> diff.txt
           echo '```' >> diff.txt
 
+      # Copy dev-values.yaml to stage-values.yaml (promote)
       - name: Promote dev to stage
         run: |
           cp deploy/dev-values.yaml deploy/stage-values.yaml
-          # Override image.tag in stage-values.yaml if input provided
-          if [[ -n "${{ github.event.inputs.image-tag }}" ]]; then
-            yq e -i '.image.tag = strenv(TAG)' deploy/stage-values.yaml
+
+      # Check if there are any changes to commit; exit if none to avoid empty commit
+      - name: Check for changes after promote
+        run: |
+          if git diff --quiet deploy/stage-values.yaml; then
+            echo "No changes to promote. Exiting workflow."
+            exit 0
           fi
 
+      # Validate the stage-values.yaml with Helm template to catch invalid config early
       - name: Validate Helm template (fail if invalid)
         run: |
           helm template my-app springboot-helm-chart/helm-charts/springboot \
             -f deploy/stage-values.yaml
 
+      # Commit and push the promotion branch
       - name: Commit and push changes
         run: |
           git add deploy/stage-values.yaml
-          MSG="${{ github.event.inputs.promotion-message }}"
-          if [[ -z "$MSG" ]]; then
-            MSG="Promote dev-values to stage-values"
-          fi
-          git commit -m "$MSG"
+          git commit -m "Promote dev-values to stage-values"
           git push origin "$BRANCH_NAME"
 
+      # Check if a PR already exists for this promotion branch
       - name: Check for existing PR
         id: pr-check
         uses: actions/github-script@v6
@@ -111,6 +89,7 @@ jobs:
             }
             return '0';
 
+      # Read the diff file content for the PR body
       - name: Read diff into output
         id: read-diff
         run: |
@@ -119,28 +98,29 @@ jobs:
           echo "$body" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      # Optional debug step (remove if not needed)
+      - name: Debug info
+        run: |
+          echo "Promotion branch: $BRANCH_NAME"
+          git log -1
+          # Uncomment if GitHub CLI is installed
+          # gh pr list --head $BRANCH_NAME || echo "No PR found"
+
+      # Create a PR only if none exists for this branch
       - name: Create Pull Request
         if: steps.pr-check.outputs.result == '0'
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ github.event.inputs.promotion-message || 'Promote dev-values to stage-values' }}
+          title: "Promote dev-values to stage-values"
           body: |
             This PR promotes changes from `dev-values.yaml` → `stage-values.yaml`.
 
-            ### Visual Diff:
+            ### 🔍 Visual Diff:
             ${{ steps.read-diff.outputs.body }}
           base: main
           branch: ${{ env.BRANCH_NAME }}
           labels: |
             auto-merge
             promotion
-
-      - name: Enable auto-merge (after approval)
-        if: steps.cpr.outputs.pull-request-number != ''
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
