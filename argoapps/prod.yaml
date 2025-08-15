@@ -8,6 +8,7 @@ spec:
   source:
     repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
     targetRevision: main
+    path: . 
     helm:
       valueFiles:
         - deploy/prod-values.yaml
