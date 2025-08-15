@@ -26,18 +26,18 @@ jobs:
             --auth-token $ARGOCD_API_TOKEN \
             --insecure
 
-      - name: Test connection to Argo CD server
+      - name: Debug ARGOCD_SERVER
         env:
           ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
-        run: curl -k "http://$ARGOCD_SERVER/healthz"
+        run: |
+          echo "ARGOCD_SERVER value: >>>$ARGOCD_SERVER<<<"
+          curl -v "http://$ARGOCD_SERVER/healthz"
 
       - name: Sync Argo CD Application
         env:
           ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
           ARGOCD_API_TOKEN: ${{ secrets.ARGOCD_API_TOKEN }}
         run: |
-          echo "ARGOCD_SERVER is: $ARGOCD_SERVER"
-          echo "ARGOCD_API_TOKEN length: ${#ARGOCD_API_TOKEN}"
           echo "Syncing application: java-argo-application"
           argocd app sync java-argo-application \
             --server "http://$ARGOCD_SERVER" \
