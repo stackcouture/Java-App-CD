@@ -29,9 +29,7 @@ jobs:
       - name: Debug ARGOCD_SERVER
         env:
           ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
-        run: |
-          echo "ARGOCD_SERVER value: >>>$ARGOCD_SERVER<<<"
-          curl -v "http://$ARGOCD_SERVER/healthz"
+        run: curl -v "http://$ARGOCD_SERVER/healthz"
 
       - name: Sync Argo CD Application
         env:
@@ -40,6 +38,7 @@ jobs:
         run: |
           echo "Syncing application: java-argo-application"
           argocd app sync java-argo-application \
-            --server "http://$ARGOCD_SERVER" \
+            --server $ARGOCD_SERVER \
             --auth-token "$ARGOCD_API_TOKEN" \
-            --insecure
+            --insecure \
+            --loglevel debug
