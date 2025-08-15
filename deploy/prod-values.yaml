@@ -13,6 +13,6 @@ service:
   type: NodePort
   port: 8080
   name: java-prod-svc
-  label: java-app
+  label: java-prod-app
 
 ecr_credes_name: ecr-creds

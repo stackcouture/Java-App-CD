@@ -13,6 +13,6 @@ service:
   type: NodePort
   port: 8080
   name: java-stage-svc
-  label: java-app
+  label: java-stage-app
 
 ecr_credes_name: ecr-creds

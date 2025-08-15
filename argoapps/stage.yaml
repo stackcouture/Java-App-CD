@@ -11,7 +11,7 @@ spec:
     path: java-app-chart
     helm:
       valueFiles:
-        - ../deploy/prod-values.yaml
+        - ../deploy/stage-values.yaml
 
   destination: 
     server: https://kubernetes.default.svc
