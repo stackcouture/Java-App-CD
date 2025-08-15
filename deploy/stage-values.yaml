@@ -10,7 +10,7 @@ namespace: stage
 imagePullSecrets: []
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 8080
   name: java-stage-svc
   label: java-stage-app

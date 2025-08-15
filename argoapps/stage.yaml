@@ -1,26 +1,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: java-stage-app
+  name: springboot-stage
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
-    targetRevision: main
-    path: java-app-chart
-    helm:
-      valueFiles:
-        - ../deploy/stage-values.yaml
-
-  destination: 
+  destination:
     server: https://kubernetes.default.svc
     namespace: stage
-
   syncPolicy:
-    syncOptions:
-    - CreateNamespace=true
-
     automated:
-      selfHeal: true
       prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  sources:
+    # Source 1: Values repo
+    - repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
+      targetRevision: main
+      ref: values
+
+    # Source 2: Helm chart repo
+    - repoURL: https://github.com/stackcouture/springboot-helm-chart.git
+      targetRevision: main
+      path: helm-charts/springboot
+      helm:
+        valueFiles:
+          - $values/deploy/stage-values.yaml

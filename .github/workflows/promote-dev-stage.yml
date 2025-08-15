@@ -1,0 +1,146 @@
+name: Promote Dev to Stage
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        description: 'Image tag to promote (optional, overrides dev-values.yaml tag)'
+        required: false
+        default: ''
+      promotion-message:
+        description: 'Promotion commit and PR message (optional)'
+        required: false
+        default: 'Promote dev-values to stage-values'
+      confirm-promotion:
+        description: 'Type "yes" to confirm promotion (required)'
+        required: true
+        default: 'no'
+
+jobs:
+  promote:
+    name: Promote dev-values to stage-values.yaml
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Check confirmation input
+        if: ${{ github.event.inputs.confirm-promotion != 'yes' }}
+        run: |
+          echo "Promotion not confirmed. Please type 'yes' to confirm."
+          exit 1
+
+      - name: Checkout main repo (values)
+        uses: actions/checkout@v3
+
+      - name: Clone Helm chart repo
+        run: git clone https://github.com/stackcouture/springboot-helm-chart.git
+
+      - name: Install yq for YAML parsing
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Configure Git
+        run: |
+          git config user.name "Naveen"
+          git config user.email "naveenramlu28@gmail.com"
+
+      - name: Determine image tag for branch name
+        id: determine-tag
+        run: |
+          if [[ -n "${{ github.event.inputs.image-tag }}" ]]; then
+            TAG="${{ github.event.inputs.image-tag }}"
+          else
+            TAG=$(yq e '.image.tag' deploy/dev-values.yaml)
+            if [[ -z "$TAG" || "$TAG" == "null" ]]; then
+              TAG=$(git rev-parse --short HEAD)
+            fi
+          fi
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          BRANCH_NAME="promote-dev-to-stage-$TAG"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "Using image tag: $TAG"
+          git checkout -b "$BRANCH_NAME"
+
+      - name: Show diff before copying
+        run: |
+          echo '```diff' > diff.txt
+          diff deploy/stage-values.yaml deploy/dev-values.yaml || true >> diff.txt
+          echo '```' >> diff.txt
+
+      - name: Promote dev to stage
+        run: |
+          cp deploy/dev-values.yaml deploy/stage-values.yaml
+          # Override image.tag in stage-values.yaml if input provided
+          if [[ -n "${{ github.event.inputs.image-tag }}" ]]; then
+            yq e -i '.image.tag = strenv(TAG)' deploy/stage-values.yaml
+          fi
+
+      - name: Validate Helm template (fail if invalid)
+        run: |
+          helm template my-app springboot-helm-chart/helm-charts/springboot \
+            -f deploy/stage-values.yaml
+
+      - name: Commit and push changes
+        run: |
+          git add deploy/stage-values.yaml
+          MSG="${{ github.event.inputs.promotion-message }}"
+          if [[ -z "$MSG" ]]; then
+            MSG="Promote dev-values to stage-values"
+          fi
+          git commit -m "$MSG"
+          git push origin "$BRANCH_NAME"
+
+      - name: Check for existing PR
+        id: pr-check
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = process.env.BRANCH_NAME;
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${branch}`
+            });
+            if (pulls.length > 0) {
+              return pulls[0].number.toString();
+            }
+            return '0';
+
+      - name: Read diff into output
+        id: read-diff
+        run: |
+          body="$(cat diff.txt)"
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$body" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.pr-check.outputs.result == '0'
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ github.event.inputs.promotion-message || 'Promote dev-values to stage-values' }}
+          body: |
+            This PR promotes changes from `dev-values.yaml` → `stage-values.yaml`.
+
+            ### Visual Diff:
+            ${{ steps.read-diff.outputs.body }}
+          base: main
+          branch: ${{ env.BRANCH_NAME }}
+          labels: |
+            auto-merge
+            promotion
+
+      - name: Enable auto-merge (after approval)
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash

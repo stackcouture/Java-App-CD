@@ -10,7 +10,7 @@ namespace: prod
 imagePullSecrets: []
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 8080
   name: java-prod-svc
   label: java-prod-app
