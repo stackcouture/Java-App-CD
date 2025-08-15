@@ -10,7 +10,7 @@ namespace: dev
 imagePullSecrets: []
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 8080
   name: java-dev-svc
   label: java-dev-app

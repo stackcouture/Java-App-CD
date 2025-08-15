@@ -12,14 +12,18 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
   sources:
-  - repoURL: https://github.com/stackcouture/Java-WebAPP-CD
-    targetRevision: main
-    ref: values
-    # Source 2: Helm chart in Git repo
-  - repoURL: https://github.com/stackcouture/springboot-helm-chart.git  
-    chart: springboot
-    targetRevision: main
-    helm:
-      valueFiles:
-        - $values/deploy/dev-values.yaml
+    # Source 1: Values repo
+    - repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
+      targetRevision: main
+      ref: values
+
+    # Source 2: Helm chart repo
+    - repoURL: https://github.com/stackcouture/springboot-helm-chart.git
+      targetRevision: main
+      path: helm-charts/springboot
+      helm:
+        valueFiles:
+          - $values/deploy/dev-values.yaml
