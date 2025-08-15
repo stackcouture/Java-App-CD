@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: springboot-dev
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  sources:
+  - repoURL: https://github.com/stackcouture/Java-WebAPP-CD
+    targetRevision: main
+    ref: values
+    # Source 2: Helm chart in Git repo
+  - repoURL: https://github.com/stackcouture/springboot-helm-chart.git  
+    chart: springboot
+    targetRevision: main
+    helm:
+      valueFiles:
+        - $values/deploy/dev-values.yaml

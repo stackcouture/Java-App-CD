@@ -15,4 +15,4 @@ service:
   name: java-dev-svc
   label: java-dev-app
 
-ecr_credes_name: ecr-creds
+ecr_credes_name: ecr-dev-creds
