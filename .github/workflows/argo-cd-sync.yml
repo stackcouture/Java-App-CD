@@ -23,7 +23,7 @@ jobs:
       - name: Apply Argo CD Application manifest
         run: |
           echo "Applying Application manifest..."
-          kubectl apply -f java-app-project/Application.yaml -n argocd
+          kubectl apply -f Java-WebAPP-CD/Application.yaml -n argocd
       
       - name: Confirm Application exists
         run: |
