@@ -9,6 +9,7 @@ spec:
     repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
     targetRevision: main
     path: . 
+    chart: java-app-chart
     helm:
       valueFiles:
         - deploy/dev-values.yaml
