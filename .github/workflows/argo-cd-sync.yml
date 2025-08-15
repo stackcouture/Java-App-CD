@@ -38,6 +38,6 @@ jobs:
         run: |
           echo "Syncing application: java-argo-application"
           argocd app sync java-argo-application \
-            --server http://$ARGOCD_SERVER \
+            --server https://$ARGOCD_SERVER \
             --auth-token $ARGOCD_API_TOKEN \
             --insecure
