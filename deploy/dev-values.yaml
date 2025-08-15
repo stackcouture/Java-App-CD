@@ -12,7 +12,7 @@ imagePullSecrets: []
 service:
   type: NodePort
   port: 8080
-  name: java-svc
+  name: java-dev-svc
   label: java-app
 
 ecr_credes_name: ecr-creds
