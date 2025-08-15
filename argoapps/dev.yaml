@@ -8,11 +8,10 @@ spec:
   source:
     repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
     targetRevision: main
-    path: . 
-    chart: java-app-chart
+    path: java-app-chart
     helm:
       valueFiles:
-        - deploy/dev-values.yaml
+        - ../deploy/dev-values.yaml
 
   destination: 
     server: https://kubernetes.default.svc
