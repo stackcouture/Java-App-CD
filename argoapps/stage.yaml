@@ -8,7 +8,6 @@ spec:
   source:
     repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
     targetRevision: main
-    path: java-app-chart
     helm:
       valueFiles:
         - deploy/stage-values.yaml
