@@ -11,10 +11,10 @@ spec:
             namespace: dev
             project: springboot-dev-project
             valuesFile: deploy/dev-values.yaml
-          - name: staging
-            namespace: staging
-            project: springboot-staging-project
-            valuesFile: deploy/staging-values.yaml
+          - name: stage
+            namespace: stage
+            project: springboot-stage-project
+            valuesFile: deploy/stage-values.yaml
           - name: prod
             namespace: prod
             project: springboot-prod-project
