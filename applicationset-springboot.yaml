@@ -21,19 +21,22 @@ spec:
             valuesFile: deploy/prod-values.yaml
   template:
     metadata:
-      name: springboot-{{name}}
+      name: "springboot-{{name}}"
     spec:
-      project: {{project}}
-      source:
-        repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
-        targetRevision: main
-        path: helm-charts/springboot
-        helm:
-          valueFiles:
-            - $values/{{valuesFile}}
+      project: "{{project}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: {{namespace}}
+        namespace: "{{namespace}}"
+      sources:
+        - repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
+          targetRevision: main
+          ref: values
+        - repoURL: https://github.com/stackcouture/springboot-helm-chart.git
+          targetRevision: main
+          path: helm-charts/springboot
+          helm:
+            valueFiles:
+              - "$values/{{valuesFile}}"
       syncPolicy:
         automated:
           prune: true

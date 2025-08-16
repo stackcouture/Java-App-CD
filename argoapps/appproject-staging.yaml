@@ -7,6 +7,7 @@ spec:
   description: Springboot Staging environment
   sourceRepos:
     - https://github.com/stackcouture/Java-WebAPP-CD.git
+    - https://github.com/stackcouture/springboot-helm-chart.git
   destinations:
     - namespace: staging
       server: https://kubernetes.default.svc
