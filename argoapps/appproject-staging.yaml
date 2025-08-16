@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: springboot-staging-project
+  name: springboot-stage-project
   namespace: argocd
 spec:
-  description: Springboot Staging environment
+  description: Springboot Stage environment
   sourceRepos:
     - https://github.com/stackcouture/Java-WebAPP-CD.git
     - https://github.com/stackcouture/springboot-helm-chart.git
   destinations:
-    - namespace: staging
+    - namespace: stage
       server: https://kubernetes.default.svc
