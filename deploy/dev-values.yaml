@@ -3,7 +3,7 @@ replicaCount: 3
 image:
   repository: "104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring"
   pullPolicy: IfNotPresent
-tag: sha256:c657b75ba5342cb4fc8800cadbeeebaab380a95ed4e47ddbd0eb7587feeb5970
+tag: sha256:2a0bb739d4f68f6eb453f04f4b92edcae2b441f87bedf94f58a8579f49e432df
 
 namespace: dev
 
