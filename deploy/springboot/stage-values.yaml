@@ -11,3 +11,11 @@ service:
   name: java-stage-svc
   label: java-stage-app
 ecr_credes_name: ecr-stage-creds
+
+SPRING_DATASOURCE_URL: jdbc:mysql://mysql-stage:3306/stagedb
+SPRING_DATASOURCE_USERNAME: stageuser
+SPRING_DATASOURCE_PASSWORD: stagepass
+replicaCount: 2
+pvc:
+  storage: 10Gi
+

@@ -16,3 +16,10 @@ service:
   label: java-prod-app
 
 ecr_credes_name: ecr-prod-creds
+
+SPRING_DATASOURCE_URL: jdbc:mysql://mysql-prod:3306/proddb
+SPRING_DATASOURCE_USERNAME: produser
+SPRING_DATASOURCE_PASSWORD: prodpass
+replicaCount: 3
+pvc:
+  storage: 20Gi

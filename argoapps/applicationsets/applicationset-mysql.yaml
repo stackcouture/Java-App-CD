@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mysql-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            values: "../../deploy/mysql/dev-values.yaml"
+            namespace: mysql-dev
+          - env: stage
+            values: "../../deploy/mysql/stage-values.yaml"
+            namespace: mysql-stage
+          - env: prod
+            values: "../../deploy/mysql/prod-values.yaml"
+            namespace: mysql-prod
+  template:
+    metadata:
+      name: "mysql-{{env}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
+    spec:
+      project: mysql-project
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{namespace}}"
+      source:
+        repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
+        targetRevision: HEAD
+        path: helm-charts/mysql
+        helm:
+          valueFiles:
+            - "{{values}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true

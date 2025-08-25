@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+  labels:
+    app: {{ .Release.Name }}-springboot
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-springboot
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-springboot
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.ecr_credes_name }}
+      containers:
+        - name: springboot
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: {{ .Values.SPRING_DATASOURCE_URL | quote }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.SPRING_DATASOURCE_USERNAME | quote }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-springboot-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          volumeMounts:
+            - mountPath: /data
+              name: springboot-pvc
+      volumes:
+        - name: springboot-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-springboot-pvc

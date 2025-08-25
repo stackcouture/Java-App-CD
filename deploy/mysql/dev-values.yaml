@@ -1,0 +1,6 @@
+mysqlDatabase: devdb
+mysqlUser: devuser
+mysqlPassword: devpass
+mysqlRootPassword: devroot
+pvc:
+  storage: 5Gi

@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: springboot-project
+  namespace: argocd
+spec:
+  description: Spring Boot apps (dev, stage, prod)
+  sourceRepos:
+    - https://github.com/stackcouture/Java-WebAPP-CD.git
+  destinations:
+    - namespace: springboot-dev
+      server: https://kubernetes.default.svc
+    - namespace: springboot-stage
+      server: https://kubernetes.default.svc
+    - namespace: springboot-prod
+      server: https://kubernetes.default.svc

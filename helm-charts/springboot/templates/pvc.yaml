@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-springboot-pvc
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Release.Name }}-springboot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.storage }}

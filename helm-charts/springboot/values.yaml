@@ -1,0 +1,18 @@
+replicaCount: 3
+
+image:
+  repository: "104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring"
+  pullPolicy: IfNotPresent
+  tag: "c27b9139db1f6eecbeba8849e5b889e05162600b"
+
+namespace: java-ns
+
+imagePullSecrets: []
+
+service:
+  type: NodePort
+  port: 8080
+  name: java-svc
+  label: java-app
+
+ecr_credes_name: ecr-creds

@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: mysql-project
+  namespace: argocd
+spec:
+  description: MySQL apps (dev, stage, prod)
+  sourceRepos:
+    - https://github.com/stackcouture/Java-WebAPP-CD.git
+  destinations:
+    - namespace: mysql-dev
+      server: https://kubernetes.default.svc
+    - namespace: mysql-stage
+      server: https://kubernetes.default.svc
+    - namespace: mysql-prod
+      server: https://kubernetes.default.svc

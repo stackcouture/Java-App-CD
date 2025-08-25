@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: springboot-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            values: "../../deploy/springboot/dev-values.yaml"
+            namespace: springboot-dev
+          - env: stage
+            values: "../../deploy/springboot/stage-values.yaml"
+            namespace: springboot-stage
+          - env: prod
+            values: "../../deploy/springboot/prod-values.yaml"
+            namespace: springboot-prod
+  template:
+    metadata:
+      name: "springboot-{{env}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "2"
+    spec:
+      project: springboot-project
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{namespace}}"
+      source:
+        - repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
+          targetRevision: HEAD
+          path: helm-charts/springboot
+          helm:
+            valueFiles:
+              - "{{values}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
