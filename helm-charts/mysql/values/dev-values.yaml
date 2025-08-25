@@ -15,3 +15,4 @@ pvc:
 
 service:
   type: ClusterIP
+  port: 8080
