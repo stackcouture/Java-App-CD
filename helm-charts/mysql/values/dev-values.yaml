@@ -4,9 +4,13 @@ image:
   tag: "8"
 
 replicaCount: 1
+
 mysqlDatabase: devdb
 mysqlUser: devuser
 mysqlPassword: devpass
 mysqlRootPassword: devroot
 pvc:
   storage: 5Gi
+
+service:
+  type: ClusterIP

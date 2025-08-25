@@ -5,9 +5,13 @@ image:
 
 replicaCount: 1 
 
+service:
+  type: ClusterIP
+
 mysqlDatabase: proddb
 mysqlUser: produser
 mysqlPassword: prodpass
 mysqlRootPassword: prodroot
 pvc:
   storage: 20Gi
+

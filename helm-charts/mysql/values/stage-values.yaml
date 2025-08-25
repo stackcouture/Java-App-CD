@@ -5,6 +5,9 @@ image:
 
 replicaCount: 1
 
+service:
+  type: ClusterIP
+
 mysqlDatabase: stagedb
 mysqlUser: stageuser
 mysqlPassword: stagepass
