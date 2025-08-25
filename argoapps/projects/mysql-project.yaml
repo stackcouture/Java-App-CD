@@ -4,9 +4,9 @@ metadata:
   name: mysql-project
   namespace: argocd
 spec:
-  description: MySQL apps (dev, stage, prod)
+  description: Project for managing MySQL deployments
   sourceRepos:
-    - https://github.com/stackcouture/Java-WebAPP-CD.git
+    - '*'  # Or your specific repo
   destinations:
     - namespace: mysql-dev
       server: https://kubernetes.default.svc
@@ -14,3 +14,6 @@ spec:
       server: https://kubernetes.default.svc
     - namespace: mysql-prod
       server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace

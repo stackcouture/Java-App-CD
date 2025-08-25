@@ -1,0 +1,13 @@
+image:
+  repository: "mysql"
+  pullPolicy: IfNotPresent
+  tag: "8"
+
+replicaCount: 1 
+
+mysqlDatabase: proddb
+mysqlUser: produser
+mysqlPassword: prodpass
+mysqlRootPassword: prodroot
+pvc:
+  storage: 20Gi
