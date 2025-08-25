@@ -8,13 +8,13 @@ spec:
     - list:
         elements:
           - env: dev
-            values: "dev-values.yaml"
+            valuesFile: dev-values.yaml
             namespace: springboot-dev
           - env: stage
-            values: "stage-values.yaml"
+            valuesFile: stage-values.yaml
             namespace: springboot-stage
           - env: prod
-            values: "prod-values.yaml"
+            valuesFile: prod-values.yaml
             namespace: springboot-prod
   template:
     metadata:
@@ -27,12 +27,12 @@ spec:
         server: https://kubernetes.default.svc
         namespace: "{{namespace}}"
       source:
-        - repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
-          targetRevision: HEAD
-          path: helm-charts/springboot
-          helm:
-            valueFiles:
-              - "values/{{valuesFile}}"
+        repoURL: https://github.com/stackcouture/Java-WebAPP-CD.git
+        targetRevision: HEAD
+        path: helm-charts/springboot
+        helm:
+          valueFiles:
+            - "values/{{valuesFile}}"
       syncPolicy:
         automated:
           prune: true

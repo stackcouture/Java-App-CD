@@ -6,7 +6,7 @@ metadata:
 spec:
   description: Project for managing MySQL deployments
   sourceRepos:
-    - '*'  # Or your specific repo
+    - https://github.com/stackcouture/Java-WebAPP-CD.git
   destinations:
     - namespace: mysql-dev
       server: https://kubernetes.default.svc
@@ -17,3 +17,6 @@ spec:
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
