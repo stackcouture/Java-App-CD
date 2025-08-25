@@ -2,17 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-deployment
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-springboot
+    app: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-springboot
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-springboot
+        app: {{ .Release.Name }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.ecr_credes_name }}

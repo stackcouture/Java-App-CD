@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-springboot
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Release.Name }}-springboot
 spec:
@@ -11,4 +12,4 @@ spec:
     port: {{ .Values.service.port }}
     targetPort: 8080
   selector:
-    app: {{ .Release.Name }}-springboot
+    app: {{ .Release.Name }}

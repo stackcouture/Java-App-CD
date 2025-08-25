@@ -8,13 +8,13 @@ spec:
     - list:
         elements:
           - env: dev
-            values: "../../deploy/springboot/dev-values.yaml"
+            values: "dev-values.yaml"
             namespace: springboot-dev
           - env: stage
-            values: "../../deploy/springboot/stage-values.yaml"
+            values: "stage-values.yaml"
             namespace: springboot-stage
           - env: prod
-            values: "../../deploy/springboot/prod-values.yaml"
+            values: "prod-values.yaml"
             namespace: springboot-prod
   template:
     metadata:
@@ -32,7 +32,7 @@ spec:
           path: helm-charts/springboot
           helm:
             valueFiles:
-              - "{{values}}"
+              - "values/{{valuesFile}}"
       syncPolicy:
         automated:
           prune: true
