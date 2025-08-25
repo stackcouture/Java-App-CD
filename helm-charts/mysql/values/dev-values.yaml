@@ -15,4 +15,4 @@ pvc:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 3306
