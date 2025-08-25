@@ -32,7 +32,7 @@ spec:
         path: helm-charts/mysql
         helm:
           valueFiles:
-            - "{{valuesFile}}"
+            - "values/{{valuesFile}}"
       syncPolicy:
         automated:
           prune: true
