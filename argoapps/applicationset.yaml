@@ -22,7 +22,7 @@ spec:
       annotations:
         argocd.argoproj.io/sync-wave: "2"
     spec:
-      project: springboot-project
+      project: app-project
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{namespace}}"
