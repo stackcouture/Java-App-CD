@@ -24,11 +24,3 @@ resources:
     cpu: "500m"
     memory: "512Mi"
 
-storageClass:
-  name: gp3-sc-mysql
-  provisioner: kubernetes.io/aws-ebs
-  parameters:
-    type: gp3
-    fsType: ext4
-  reclaimPolicy: Retain
-  volumeBindingMode: WaitForFirstConsumer
