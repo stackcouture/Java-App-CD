@@ -8,7 +8,7 @@ image:
 imagePullSecrets: []
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 80
 
 ecr_credes_name: ecr-prod-creds
