@@ -8,14 +8,14 @@ image:
 imagePullSecrets: []
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 8080
 
 ecr_credes_name: ecr-prod-creds
 
-SPRING_DATASOURCE_URL: jdbc:mysql://mysql-prod:3306/proddb
+SPRING_DATASOURCE_URL: jdbc:mysql://mysql-prod-mysql.mysql-prod.svc.cluster.local:3306/proddb
 SPRING_DATASOURCE_USERNAME: produser
 SPRING_DATASOURCE_PASSWORD: prodpass
-replicaCount: 3
+
 pvc:
   storage: 20Gi
