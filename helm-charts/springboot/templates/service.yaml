@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-springboot
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-springboot
+    app: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.type }}
   ports:
