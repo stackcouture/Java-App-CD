@@ -2,12 +2,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-springboot
+  name: {{ .Release.Name }}-ingress
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
@@ -24,7 +22,7 @@ spec:
             pathType: {{ .pathType | quote }}
             backend:
               service:
-                name: {{ $.Release.Name }}-springboot
+                name: {{ $.Release.Name }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
