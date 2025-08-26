@@ -1,6 +1,0 @@
-mysqlDatabase: proddb
-mysqlUser: produser
-mysqlPassword: prodpass
-mysqlRootPassword: prodroot
-pvc:
-  storage: 20Gi

@@ -1,6 +1,0 @@
-mysqlDatabase: stagedb
-mysqlUser: stageuser
-mysqlPassword: stagepass
-mysqlRootPassword: stageroot
-pvc:
-  storage: 10Gi
