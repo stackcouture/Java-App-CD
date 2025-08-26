@@ -16,7 +16,7 @@ ecr_credes_name: ecr-stage-creds
 
 SPRING_DATASOURCE_URL: jdbc:mysql://mysql-stage-mysql.mysql-stage.svc.cluster.local:3306/stagedb
 SPRING_DATASOURCE_USERNAME: stageuser
-# SPRING_DATASOURCE_PASSWORD: stagepass
+SPRING_DATASOURCE_PASSWORD: stagepass
 
 pvc:
   storage: 10Gi
