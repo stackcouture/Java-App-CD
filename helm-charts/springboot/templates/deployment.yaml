@@ -25,6 +25,8 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 6 }}
           env:
             - name: SPRING_DATASOURCE_URL
               value: {{ .Values.SPRING_DATASOURCE_URL | quote }}

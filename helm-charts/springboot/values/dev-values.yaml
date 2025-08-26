@@ -19,3 +19,11 @@ SPRING_DATASOURCE_PASSWORD: devpass
 
 pvc:
   storage: 5Gi
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
