@@ -37,3 +37,15 @@ storageClass:
     fsType: ext4
   reclaimPolicy: Retain
   volumeBindingMode: WaitForFirstConsumer
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: stage.myapp.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
