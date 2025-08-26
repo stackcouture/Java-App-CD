@@ -43,18 +43,6 @@ spec:
             periodSeconds: 30
             timeoutSeconds: 3
             failureThreshold: 3
-          # env:
-          #   - name: SPRING_DATASOURCE_URL
-          #     value: {{ .Values.SPRING_DATASOURCE_URL | quote }}
-          #   - name: SPRING_DATASOURCE_USERNAME
-          #     value: {{ .Values.SPRING_DATASOURCE_USERNAME | quote }}
-          #   - name: SPRING_DATASOURCE_PASSWORD
-          #     value: {{ .Values.SPRING_DATASOURCE_PASSWORD | quote }}
-            # - name: SPRING_DATASOURCE_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: {{ .Release.Name }}-springboot-secret
-            #       key: SPRING_DATASOURCE_PASSWORD
       #     volumeMounts:
       #       - mountPath: /data
       #         name: springboot-pvc
