@@ -27,7 +27,7 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: dev.myapp.com
+    - host: dev.stackcouture.online
       paths:
         - path: /
           pathType: Prefix
