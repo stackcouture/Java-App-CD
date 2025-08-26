@@ -19,7 +19,8 @@ jobs:
       contents: write
 
     env:
-      FILE_PATH: deploy/stage-values.yaml
+      
+      FILE_PATH: helm-charts/springboot/values/stage-values.yaml
       IMAGE_PATH: .image.tag
 
     steps:
