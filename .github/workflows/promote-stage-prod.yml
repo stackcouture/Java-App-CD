@@ -1,4 +1,4 @@
-name: Promote Image Tag to Stage
+name: Promote Image Tag to Prod
 
 on:
   workflow_dispatch:
