@@ -13,14 +13,14 @@ on:
         type: string
 
 jobs:
-  promote-to-stage:
+  promote-to-prod:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     env:
       
-      FILE_PATH: helm-charts/springboot/values/stage-values.yaml
+      FILE_PATH: helm-charts/springboot/values/prod-values.yaml
       IMAGE_PATH: .image.tag
 
     steps:
@@ -52,7 +52,7 @@ jobs:
       - name: Check if tag already promoted
         if: env.CURRENT_TAG == inputs.image_tag
         run: |
-          echo "The tag '${{ inputs.image_tag }}' is already in stage-values.yaml. No promotion needed."
+          echo "The tag '${{ inputs.image_tag }}' is already in prod-values.yaml. No promotion needed."
           exit 0
 
       - name: Update stage-values.yaml with new tag
