@@ -1,18 +1,13 @@
 replicaCount: 1
-
 image:
   repository: "104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring"
   pullPolicy: IfNotPresent
-  tag: fa35465bd0517b9ea0bf6956a64f2397df3d24c0-235
-
+  tag: 3abeb44fb62bd36726c9bab420b783f7757f9967-237
 imagePullSecrets: []
-
 service:
   type: ClusterIP
   port: 80
-
 ecr_credes_name: ecr-prod-creds
-
 resources:
   requests:
     cpu: "100m"
@@ -20,7 +15,6 @@ resources:
   limits:
     cpu: "500m"
     memory: "512Mi"
-
 ingress:
   enabled: true
   className: nginx
