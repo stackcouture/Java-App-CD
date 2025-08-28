@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: "104824081961.dkr.ecr.ap-south-1.amazonaws.com/javaspring"
   pullPolicy: IfNotPresent
-  tag: f0e663778227b032cefc390f63e16a22e21846e3-249
+  tag: ae3028911fd3f7d33285b9c090263147e8afdd07-250
 imagePullSecrets: []
 service:
   type: ClusterIP
