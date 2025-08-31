@@ -127,16 +127,21 @@ Argo CD detects the change and syncs the target environment with the updated con
     A --> B --> C --> D --> E --> F --> G --> H --> I
 ```
 ---
-📋 Step-by-Step Breakdown
+
+### Step-by-Step Breakdown
+
+```bash 
+ ---------------- ---------------------------------------------------------------------------
 | Step           | Description                                                               |
 |----------------|---------------------------------------------------------------------------|
-| 🏗️ 1. CI Build     | CI (e.g., Jenkins) builds the Docker image and pushes it to Amazon ECR.   |
-| 📝 2. Dev Update   | The `dev-values.yaml` file is updated with the new `image.tag`.           |
-| 🚀 3. Dev Deploy   | Argo CD detects the change and deploys to the `dev` environment.          |
-| 🔄 4. Promote to Stage | GitHub Action `promote-dev-stage` copies the image tag to `stage-values.yaml`. |
-| 🚀 5. Stage Deploy | Argo CD deploys to the `stage` environment.                               |
-| 🔄 6. Promote to Prod  | GitHub Action `promote-stage-prod` updates `prod-values.yaml`.            |
-| 🚀 7. Prod Deploy  | Argo CD syncs and deploys to the `prod` environment.                      |
+| 1. CI Build     | CI (e.g., Jenkins) builds the Docker image and pushes it to Amazon ECR.   |
+| 2. Dev Update   | The `dev-values.yaml` file is updated with the new `image.tag`.           |
+| 3. Dev Deploy   | Argo CD detects the change and deploys to the `dev` environment.          |
+| 4. Promote to Stage | GitHub Action `promote-dev-stage` copies the image tag to `stage-values.yaml`. |
+| 5. Stage Deploy | Argo CD deploys to the `stage` environment.                               |
+| 6. Promote to Prod  | GitHub Action `promote-stage-prod` updates `prod-values.yaml`.            |
+| 7. Prod Deploy  | Argo CD syncs and deploys to the `prod` environment.                      |
 
+```
 
 ```
