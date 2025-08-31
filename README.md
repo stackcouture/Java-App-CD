@@ -154,6 +154,7 @@ Argo CD detects the change and syncs the target environment with the updated con
 ```
 ### License
 
-This project is licensed under the MIT License – see the [LICENSE](./LICENSE) file for details.
+This project is provided under a **view-only** license for review and portfolio purposes.  
+See the [LICENSE](./LICENSE) file for details.
 
 ```
