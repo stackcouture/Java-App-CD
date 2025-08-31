@@ -1,5 +1,14 @@
 ## Java-App-CD
 
+![View Only](https://img.shields.io/badge/license-view--only-red)
+![Status](https://img.shields.io/badge/usage-portfolio%20only-blue)
+
+> ⚠️ **Notice:** This repository is made publicly available for **portfolio evaluation purposes only**.  
+> **You are not permitted to copy, reuse, distribute, or modify this code** in any form.  
+> All rights are reserved by the author. Please contact [Naveen R](naveenramlu28@gmail.com) for permission.
+
+---
+
 This repository is the **GitOps Continuous Deployment (CD)** source for the Java Web Application, using **Argo CD**, **Helm**, and **GitHub Actions** to promote applications across environments (`dev` → `stage` → `prod`).
 
 ---
