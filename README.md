@@ -1,10 +1,10 @@
-# Java-App-CD
+## Java-App-CD
 
 This repository is the **GitOps Continuous Deployment (CD)** source for the Java Web Application, using **Argo CD**, **Helm**, and **GitHub Actions** to promote applications across environments (`dev` → `stage` → `prod`).
 
 ---
 
-## 📦 Overview
+### 📦 Overview
 
 This repository hosts:
 
@@ -15,7 +15,7 @@ This repository hosts:
 
 ---
 
-## 🚀 Promotion Flow
+### 🚀 Promotion Flow
 
 The promotion is automated and driven through GitHub Actions workflows and Argo CD:
 
@@ -35,17 +35,19 @@ dev-values.yaml → stage-values.yaml → prod-values.yaml
 
 ---
 
-## Argo CD Integration
+### Argo CD Integration
 
 Argo CD monitors this repository and applies changes based on the `ApplicationSet` defined in:
 
+```bash 
 argoapps/
-├── app-project.yaml
-├── applicationset.yaml
+    app-project.yaml
+    applicationset.yaml
+```
 
 ```bash 
- - kubectl apply -f argoapps/app-project.yaml 
- - kubectl apply -f argoapps/applicationset.yaml
+    kubectl apply -f argoapps/app-project.yaml 
+    kubectl apply -f argoapps/applicationset.yaml
 ```
 
 This setup allows Argo CD to:
