@@ -113,7 +113,7 @@ The updated values file is committed and pushed to the Git repository.
 Argo CD detects the change and syncs the target environment with the updated configuration.
 
 ---
-
+```bash 
 graph TD
     A[CI builds and pushes image to ECR]
     B[Jenkins or CI updates dev-values.yaml]
@@ -126,4 +126,5 @@ graph TD
     I[Argo CD deploys to prod]
 
     A --> B --> C --> D --> E --> F --> G --> H --> I
+```
 ---
