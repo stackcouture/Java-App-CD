@@ -152,5 +152,7 @@ Argo CD detects the change and syncs the target environment with the updated con
 | 7. Prod Deploy  | Argo CD syncs and deploys to the `prod` environment.                      |
 
 ```
+### License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ```

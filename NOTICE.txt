@@ -1,0 +1,11 @@
+This repository is protected under copyright.
+
+Usage is restricted to:
+- Viewing the source code for evaluation, portfolio purposes
+
+The following are strictly prohibited:
+- Reuse in other projects (public or private)
+- Distribution, fork, or publication
+- Modification or derivative work
+
+Contact the author for any permissions beyond read-only access.
