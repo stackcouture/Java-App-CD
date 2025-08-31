@@ -8,20 +8,8 @@ This repository serves as the **GitOps-driven Continuous Deployment (CD)** pipel
 
 This repository is part of a CI/CD ecosystem:
 
-- **CI Repo:** [Java-WebAPP-CI](https://github.com/stackcouture/Java-WebAPP-CI)  
-- **CD Repo (this repo):** Contains Kubernetes manifests or Helm charts used by **ArgoCD** to deploy application updates.
-
----
-
-## 🚀 CD Pipeline Summary
-
-The Jenkins pipeline performs the following actions:
-
-1. **Checkout CD Repository**
-2. **Wait for Manual Approval** before deployment
-3. **Update `imageTag` in deployment manifests**
-4. **Commit and Push Changes** to this GitOps repository
-5. **ArgoCD Syncs Automatically** to deploy the new version
+- **CI Repo:** [Java-APP-CI](https://github.com/stackcouture/Java-APP-CI)  
+- **CD Repo (this repo):** Helm charts used by **ArgoCD** to deploy application updates.
 
 ---
 
