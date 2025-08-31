@@ -1,26 +1,57 @@
 # Java-App-CD
 
-This repository serves as the **GitOps-driven Continuous Deployment (CD)** pipeline for the Java Web Application managed through Jenkins and **ArgoCD**. It integrates secure DevSecOps practices, automated quality gates, image signing, and deployment promotion workflows.
+This repository is the **GitOps Continuous Deployment (CD)** source for the Java Web Application, using **Argo CD**, **Helm**, and **GitHub Actions** to promote applications across environments (`dev` → `stage` → `prod`).
 
 ---
 
-## 📦 Project Overview
+## 📦 Overview
 
-This repository is part of a CI/CD ecosystem:
+This repository hosts:
 
-- **CI Repo:** [Java-APP-CI](https://github.com/stackcouture/Java-APP-CI)  
-- **CD Repo (this repo):** Helm charts used by **ArgoCD** to deploy application updates.
+- Helm charts for the Spring Boot application
+- Environment-specific configuration (`dev`, `stage`, `prod`)
+- Argo CD ApplicationSet for dynamic GitOps deployments
+- GitHub Actions workflows to automate promotion between environments
 
 ---
 
-## 🔧 Technologies Used
+## 🚀 Promotion Flow
 
-| Tool           | Purpose                                  |
-|----------------|------------------------------------------|
-| **Jenkins**    | Orchestrates the CD workflow             |
-| **ArgoCD**     | GitOps-based deployment engine           |
-| **AWS ECR**    | Stores signed Docker images              |
-| **Cosign**     | Signs Docker images (Sigstore)           |
-| **GitHub**     | Source control and GitOps integration    |
+The promotion is automated and driven through GitHub Actions workflows and Argo CD:
+
+dev-values.yaml → stage-values.yaml → prod-values.yaml
+
+
+| File/Folder                     | Description                                  |
+|--------------------------------|----------------------------------------------|
+| `.github/workflows/`           | GitHub Actions workflows                     |
+| `promote-dev-stage.yml`        | Promotes `dev` to `stage`                    |
+| `promote-stage-prod.yml`       | Promotes `stage` to `prod`                   |
+| `argoapps/`                    | Contains Argo CD ApplicationSet definitions  |
+| `helm-charts/springboot/`      | Helm chart for Spring Boot app               |
+| `templates/`                   | Helm templates: `deployment`, `service`, etc |
+| `values/`                      | Environment-specific Helm values             |
+| `Chart.yaml`                   | Helm chart metadata                          |
+
+---
+
+## Argo CD Integration
+
+Argo CD monitors this repository and applies changes based on the `ApplicationSet` defined in:
+
+argoapps/
+├── app-project.yaml
+├── applicationset.yaml
+
+```bash 
+ - kubectl apply -f argoapps/app-project.yaml 
+ - kubectl apply -f argoapps/applicationset.yaml
+```
+
+This setup allows Argo CD to:
+
+- Automatically deploy to `dev`, `stage`, or `prod`
+- Use a single Helm chart with different `values` files
+- Handle multi-env GitOps from a central source
 
 ---
