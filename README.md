@@ -99,27 +99,23 @@ helm-charts/springboot/
 ---
 ### How to Promote
 
+```text 
 You can promote deployments either manually or through automation using GitHub Actions. The promotion process works as follows:
-
-1. Trigger the Promotion Workflow
-
+```
+### 1️⃣ Trigger the Promotion Workflow
 Run the GitHub Actions workflow (manually or automatically) to start the promotion process.
 
-2. Read Current Image Tag
+### 2️⃣ Read Current Image Tag
+The workflow reads the current `image.tag` from the source environment (e.g., `dev` or `staging`).
 
-The workflow reads the current image.tag from the source environment (e.g., dev or staging).
+### 3️⃣ Copy to Target Environment
+The same image tag is copied into the `values` file of the target environment (e.g., `staging → prod`).
 
-3. Copy to Target Environment
+### 4️⃣ Commit & Push Changes
+The updated `values` file is committed and pushed to the Git repository.
 
-The same image tag is copied into the values file of the target environment (e.g., staging → prod).
-
-4. Commit & Push Changes
-
-The updated values file is committed and pushed to the Git repository.
-
-5. Argo CD Sync
-
-Argo CD detects the change and syncs the target environment with the updated configuration.
+### 5️⃣ Argo CD Sync
+Argo CD detects the change and synchronizes the target environment with the updated configuration.
 
 ---
 ```bash 
