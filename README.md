@@ -21,8 +21,18 @@ This repository hosts:
 ---
 ## Demo Flow
 
+### Dev Deployment Flow
+
 ![Demo GIF](https://github.com/stackcouture/devsecops-gitops-automation/raw/main/demos/cd-dev-flow.gif)
+
+---
+### Stage Promotion Flow
+
 ![Demo GIF](https://github.com/stackcouture/devsecops-gitops-automation/raw/main/demos/cd-stage-flow.gif)
+
+---
+---
+### Production Promotion Flow
 ![Demo GIF](https://github.com/stackcouture/devsecops-gitops-automation/raw/main/demos/cd-prod-flow.gif)
 
 ---
