@@ -19,6 +19,13 @@ This repository hosts:
 - GitHub Actions workflows to automate promotion between environments
 
 ---
+## Demo Flow
+
+![Demo GIF](https://github.com/stackcouture/devsecops-gitops-automation/raw/main/demos/cd-dev-flow.gif)
+![Demo GIF](https://github.com/stackcouture/devsecops-gitops-automation/raw/main/demos/cd-stage-flow.gif)
+![Demo GIF](https://github.com/stackcouture/devsecops-gitops-automation/raw/main/demos/cd-prod-flow.gif)
+
+---
 
 ### Promotion Flow
 
