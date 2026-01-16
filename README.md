@@ -148,6 +148,20 @@ Argo CD detects the change and synchronizes the target environment with the upda
 | 7. Prod Deploy  | Argo CD syncs and deploys to the `prod` environment.                      |
 
 ```
+
+### Deployment Promotion Flow
+
+This pipeline uses **GitOps principles** to safely promote Docker images from `dev` → `stage` → `prod`.  
+All promotions are tracked via Git commits, and Argo CD ensures the environments match the repository.
+
+**Benefits:**
+- Automates image promotion across environments
+- Guarantees deployment integrity and traceability
+- Provides auditable and controlled releases
+- Reduces risk with staged promotion
+- Ensures reproducible and secure deployments
+---
+
 ### License
 
 This project is provided under a **view-only** license for review and portfolio purposes.  
